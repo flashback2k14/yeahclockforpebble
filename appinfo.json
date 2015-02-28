@@ -1,0 +1,40 @@
+{
+    "appKeys": {},
+    "capabilities": [
+        ""
+    ],
+    "companyName": "yeahdev@gmail.com",
+    "longName": "Yeah!Clock",
+    "projectType": "native",
+    "resources": {
+        "media": [
+            {
+                "file": "images/icon_28.png",
+                "name": "icon",
+                "type": "png"
+            },
+            {
+                "file": "fonts/RobotoSlab-Regular.ttf",
+                "name": "ROBOTO_SLAB_64",
+                "type": "font"
+            },
+            {
+                "file": "fonts/RobotoSlab-Regular.ttf",
+                "name": "ROBOTO_SLAB_20",
+                "type": "font"
+            }
+        ]
+    },
+    "sdkVersion": "3",
+    "shortName": "Yeah!Clock",
+    "targetPlatforms": [
+        "aplite",
+        "basalt"
+    ],
+    "uuid": "3a78991d-1837-4fa9-adc8-356e8eee8282",
+    "versionCode": 1,
+    "versionLabel": "1.0",
+    "watchapp": {
+        "watchface": true
+    }
+}
