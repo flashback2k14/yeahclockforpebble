@@ -20,9 +20,9 @@ $().ready(function() {
 	});
 	
 	//Set form values to whatever is passed in.
-	var obj = jQuery.parseJSON(decodeURIComponent(window.location.search.substring(1)));
+	/**var obj = jQuery.parseJSON(decodeURIComponent(window.location.search.substring(1)));
 	for(key in obj) {
 	  $("#"+[key]).val(obj[key]);
 	  $("#"+[key]).val(obj[key]).slider("refresh");       
-	}
+	}*/
 });
