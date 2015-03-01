@@ -12,25 +12,25 @@ static GFont s_date_font;
  * update time function
  */
 static void update_time() {
-  // Get a tm structure
-  time_t temp = time(NULL); 
-  struct tm *tick_time = localtime(&temp);
-  // Create a long-lived buffer
-  static char buffer_h[] = "00";
-  static char buffer_min[] = "00";
-  static char buffer_date[] = "Mon, 01.01.15";
-  // Write the current hours and minutes into the buffer
-  if(clock_is_24h_style() == true) {
+	// Get a tm structure
+	time_t temp = time(NULL); 
+	struct tm *tick_time = localtime(&temp);
+	// Create a long-lived buffer
+	static char buffer_h[] = "00";
+	static char buffer_min[] = "00";
+	static char buffer_date[] = "Mon, 01.01.15";
+	// Write the current hours and minutes into the buffer
+	if(clock_is_24h_style() == true) {
 		// Use 24 hour format
 		strftime(buffer_h, sizeof("00"), "%H", tick_time);
-    } else {
-    	// Use 12 hour format
+	} else {
+		// Use 12 hour format
 		strftime(buffer_h, sizeof("00"), "%I", tick_time);  
-    }
+	}
 	strftime(buffer_min, sizeof("00"), "%M", tick_time);
 	strftime(buffer_date, sizeof("Mon, 01.01.15"), "%a, %d.%m.%y", tick_time);
-  	// Display this time on the TextLayer
-  	text_layer_set_text(s_hours_layer, buffer_h);	
+	// Display this time on the TextLayer
+	text_layer_set_text(s_hours_layer, buffer_h);	
 	text_layer_set_text(s_minutes_layer, buffer_min);
 	text_layer_set_text(s_date_layer, buffer_date);
 }
@@ -49,29 +49,21 @@ static void main_window_load(Window *window) {
 	s_date_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_ROBOTO_SLAB_20));
 	//create textlayers
 	s_hours_layer = text_layer_create(GRect(0, -5,144,70));
-	s_date_layer = text_layer_create(GRect(0, 72,144,40));
+	s_date_layer = text_layer_create(GRect(0, 72,144,30));
 	s_minutes_layer = text_layer_create(GRect(0, 95,144,70));
 	//set color
 	#ifdef PBL_COLOR
 		text_layer_set_background_color(s_hours_layer, GColorFolly);
 		text_layer_set_text_color(s_hours_layer, GColorBlack);
-	#else
-		text_layer_set_background_color(s_hours_layer, GColorBlack);
-		text_layer_set_text_color(s_hours_layer, GColorWhite);
-	#endif
-		
-	#ifdef PBL_COLOR
 		text_layer_set_background_color(s_date_layer, GColorBrightGreen);
 		text_layer_set_text_color(s_date_layer, GColorBlack);
-	#else
-		text_layer_set_background_color(s_date_layer, GColorBlack);
-		text_layer_set_text_color(s_date_layer, GColorWhite);
-	#endif
-		
-	#ifdef PBL_COLOR
 		text_layer_set_background_color(s_minutes_layer, GColorOrange);
 		text_layer_set_text_color(s_minutes_layer, GColorWhite);
 	#else
+		text_layer_set_background_color(s_hours_layer, GColorBlack);
+		text_layer_set_text_color(s_hours_layer, GColorWhite);
+		text_layer_set_background_color(s_date_layer, GColorBlack);
+		text_layer_set_text_color(s_date_layer, GColorWhite);
 		text_layer_set_background_color(s_minutes_layer, GColorBlack);
 		text_layer_set_text_color(s_minutes_layer, GColorWhite);
 	#endif
