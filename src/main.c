@@ -1,5 +1,9 @@
 #include <pebble.h>
 /**
+ * define app keys
+ */
+#define KEY_INVERT 0
+/**
  * Globals
  */
 static Window *s_main_window;
@@ -8,6 +12,45 @@ static TextLayer *s_minutes_layer;
 static TextLayer *s_date_layer;
 static GFont s_time_font;
 static GFont s_date_font;
+/**
+ * customise watchface
+ */
+static void in_recv_handler(DictionaryIterator *iterator, void *context) {
+	//Get Tuple
+	Tuple *t = dict_read_first(iterator);
+	if(t) {
+		switch(t -> key) {
+			case KEY_INVERT:
+				//It's the KEY_INVERT key
+				if(strcmp(t -> value -> cstring, "on") == 0) {
+					//Set and save as inverted
+					text_layer_set_background_color(s_hours_layer, GColorWhite);
+					text_layer_set_text_color(s_hours_layer, GColorBlack);
+					text_layer_set_background_color(s_date_layer, GColorWhite);
+					text_layer_set_text_color(s_date_layer, GColorBlack);
+					text_layer_set_background_color(s_minutes_layer, GColorWhite);
+					text_layer_set_text_color(s_minutes_layer, GColorBlack);
+					window_set_background_color(s_main_window, GColorWhite);
+					//save invert key
+					persist_write_bool(KEY_INVERT, true);
+				} else if(strcmp(t -> value -> cstring, "off") == 0) {
+					//Set and save as not inverted
+					text_layer_set_background_color(s_hours_layer, GColorBlack);
+					text_layer_set_text_color(s_hours_layer, GColorWhite);
+					text_layer_set_background_color(s_date_layer, GColorBlack);
+					text_layer_set_text_color(s_date_layer, GColorWhite);
+					text_layer_set_background_color(s_minutes_layer, GColorBlack);
+					text_layer_set_text_color(s_minutes_layer, GColorWhite);
+					window_set_background_color(s_main_window, GColorBlack);
+					//save invert key
+					persist_write_bool(KEY_INVERT, false);
+				}
+				break;
+			default:
+				break;
+		}
+	}
+}
 /**
  * update time function
  */
@@ -44,6 +87,8 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
  * init Watchface layout
  */
 static void main_window_load(Window *window) {
+	//check for saved option
+ 	bool inverted = persist_read_bool(KEY_INVERT);
 	//create GFont
 	s_time_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_ROBOTO_SLAB_64));
 	s_date_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_ROBOTO_SLAB_20));
@@ -60,12 +105,22 @@ static void main_window_load(Window *window) {
 		text_layer_set_background_color(s_minutes_layer, GColorOrange);
 		text_layer_set_text_color(s_minutes_layer, GColorWhite);
 	#else
-		text_layer_set_background_color(s_hours_layer, GColorBlack);
-		text_layer_set_text_color(s_hours_layer, GColorWhite);
-		text_layer_set_background_color(s_date_layer, GColorBlack);
-		text_layer_set_text_color(s_date_layer, GColorWhite);
-		text_layer_set_background_color(s_minutes_layer, GColorBlack);
-		text_layer_set_text_color(s_minutes_layer, GColorWhite);
+		//Option-specific setup
+		if(inverted == true) {
+		    text_layer_set_background_color(s_hours_layer, GColorWhite);
+			text_layer_set_text_color(s_hours_layer, GColorBlack);
+			text_layer_set_background_color(s_date_layer, GColorWhite);
+			text_layer_set_text_color(s_date_layer, GColorBlack);
+			text_layer_set_background_color(s_minutes_layer, GColorWhite);
+			text_layer_set_text_color(s_minutes_layer, GColorBlack);
+	    } else {
+		    text_layer_set_background_color(s_hours_layer, GColorBlack);
+			text_layer_set_text_color(s_hours_layer, GColorWhite);
+			text_layer_set_background_color(s_date_layer, GColorBlack);
+			text_layer_set_text_color(s_date_layer, GColorWhite);
+			text_layer_set_background_color(s_minutes_layer, GColorBlack);
+			text_layer_set_text_color(s_minutes_layer, GColorWhite);
+	    }
 	#endif
 	//improve layout
 	text_layer_set_font(s_hours_layer, s_time_font);
@@ -105,7 +160,7 @@ static void init() {
 	#ifdef PBL_COLOR
 	  window_set_background_color(s_main_window, GColorDukeBlue);
 	#else
-	  window_set_background_color(s_main_window, GColorBlack);
+		window_set_background_color(s_main_window, GColorBlack);
 	#endif
 	//hide system status
 	window_set_fullscreen(s_main_window, true);
@@ -118,6 +173,9 @@ static void init() {
 	window_stack_push(s_main_window, true);
 	//register with TickTimerService
 	tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
+	//
+	app_message_register_inbox_received((AppMessageInboxReceived) in_recv_handler);
+	app_message_open(app_message_inbox_size_maximum(), app_message_outbox_size_maximum());
 }
 /**
  * deinit watchface

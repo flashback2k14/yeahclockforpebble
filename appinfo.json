@@ -1,5 +1,7 @@
 {
-    "appKeys": {},
+    "appKeys": {
+        "KEY_INVERT": 0
+    },
     "capabilities": [
         "configurable"
     ],

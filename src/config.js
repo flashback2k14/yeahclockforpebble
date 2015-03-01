@@ -25,6 +25,16 @@ Pebble.addEventListener("webviewclosed", function(e) {
   if (e.response.charAt(0) == "{" && e.response.slice(-1) == "}" && e.response.length > 5) {
     options = JSON.parse(decodeURIComponent(e.response));
     console.log("Options = " + JSON.stringify(options));
+	 
+	//Send to Pebble, persist there
+	Pebble.sendAppMessage({"KEY_INVERT": options.name},
+      function(e) {
+        console.log("Sending settings data...");
+      },
+      function(e) {
+        console.log("Settings feedback failed!");
+      }
+	);
   } else {
     console.log("Cancelled");
   }
