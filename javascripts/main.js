@@ -1,18 +1,19 @@
-console.log('This would be the main JS file.');
 function saveOptions() {
 	var options = {}
 	//Add all textual values
-	$('textarea, select, [type="hidden"], [type="password"], [type="text"]').each(function(){options[$(this).attr('id')] = $(this).val();})
+	$('select, [type="password"], [type="text"]').each(function(){
+		options[$(this).attr('id')] = $(this).val();
+	});
 	return options;
 }
 
 $().ready(function() {
-	$("#b-cancel").click(function() {
+	$("#btnCancel").click(function() {
 	  console.log("Cancel");
 	  document.location = "pebblejs://close";
 	});
 	
-	$("#b-submit").click(function() {
+	$("#btnSubmit").click(function() {
 	  console.log("Submit");
 	  var location = "pebblejs://close#" + encodeURIComponent(JSON.stringify(saveOptions()));
 	  console.log("Warping to: " + location);
