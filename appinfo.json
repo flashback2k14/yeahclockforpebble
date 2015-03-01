@@ -10,6 +10,12 @@
         "media": [
             {
                 "file": "images/icon_28.png",
+                "menuIcon": true,
+                "name": "icon_2",
+                "type": "png"
+            },
+            {
+                "file": "images/icon.png",
                 "name": "icon",
                 "type": "png"
             },
