@@ -1,10 +1,10 @@
 {
     "appKeys": {},
     "capabilities": [
-        ""
+        "configurable"
     ],
     "companyName": "yeahdev@gmail.com",
-    "longName": "Yeah!Clock",
+    "longName": "Yeah! Clock",
     "projectType": "native",
     "resources": {
         "media": [
@@ -26,14 +26,14 @@
         ]
     },
     "sdkVersion": "3",
-    "shortName": "Yeah!Clock",
+    "shortName": "Yeah! Clock",
     "targetPlatforms": [
         "aplite",
         "basalt"
     ],
     "uuid": "3a78991d-1837-4fa9-adc8-356e8eee8282",
     "versionCode": 1,
-    "versionLabel": "1.0",
+    "versionLabel": "1.1",
     "watchapp": {
         "watchface": true
     }
