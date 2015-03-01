@@ -1,9 +1,7 @@
 function saveOptions() {
 	var options = {}
 	//Add all textual values
-	$('select, [type="password"], [type="text"]').each(function(){
-		options[$(this).attr('id')] = $(this).val();
-	});
+	$('select, [type="password"], [type="text"]').each(function(){options[$(this).attr('id')] = $(this).val();})
 	return options;
 }
 
