@@ -19,7 +19,7 @@ function cancelCustomization(){
 	document.location = "pebblejs://close";
 }*/
 
-var submitButton = document.getElementById("btnSubmit");
+/**var submitButton = document.getElementById("btnSubmit");
 submitButton.addEventListener("click", 
 	function() {
 		console.log("Submit");
@@ -36,4 +36,19 @@ cancelButton.addEventListener("click",
 		console.log("Cancel");
 		document.location = "pebblejs://close";
 	}
-,false);
+,false);*/
+
+$().ready(function() {
+	$("#btnCancel").click(function() { 	 
+		console.log("Cancel"); 	 
+		document.location = "pebblejs://close"; 	
+	}); 
+	
+	$("#btnSubmit").click(function() { 	 
+		console.log("Submit"); 	 
+		var location = "pebblejs://close#" + encodeURIComponent(JSON.stringify(saveOptions())); 	
+		console.log("Warping to: " + location); 	 
+		console.log(location); 	 
+		document.location = location; 	
+	});
+});
