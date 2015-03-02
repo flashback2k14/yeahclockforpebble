@@ -6,7 +6,7 @@ function saveOptions() {
 	return options;
 }
 
-function submitCustomization() {
+/**function submitCustomization() {
 	console.log("Submit");
 	var options = saveOptions();
 	var location = "pebblejs://close#" + encodeURIComponent(JSON.stringify(options));
@@ -17,10 +17,23 @@ function submitCustomization() {
 function cancelCustomization(){
 	console.log("Cancel");
 	document.location = "pebblejs://close";
-}
+}*/
 
 var submitButton = document.getElementById("btnSubmit");
-submitButton.addEventListener("click", submitCustomization,false);
+submitButton.addEventListener("click", 
+	function() {
+		console.log("Submit");
+		var options = saveOptions();
+		var location = "pebblejs://close#" + encodeURIComponent(JSON.stringify(options));
+		console.log("Warping to: " + location);
+		document.location = location;
+	}
+,false);
 
 var cancelButton = document.getElementById("btnCancel");
-cancelButton.addEventListener("click", cancelCustomization, false);
+cancelButton.addEventListener("click", 
+	function(){
+		console.log("Cancel");
+		document.location = "pebblejs://close";
+	}
+,false);
