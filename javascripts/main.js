@@ -18,10 +18,11 @@
     console.log(location);
     document.location = location;
   });
-});*/
+});
 
 function saveOptions() {
-  var options = {}
+  var options = {};
+
   $('select, [type="text"]').each(function(){options[$(this).attr('id')] = $(this).val();})
   return options;
 }
@@ -47,4 +48,4 @@ $().ready(function() {
       $("#"+[key]).val(obj[key]);
     }
   }
-});
+});*/
