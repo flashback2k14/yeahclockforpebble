@@ -93,7 +93,7 @@ static void main_window_load(Window *window) {
 	s_time_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_ROBOTO_SLAB_64));
 	s_date_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_ROBOTO_SLAB_20));
 	//create textlayers
-	s_hours_layer = text_layer_create(GRect(0, 0,144,70));
+	s_hours_layer = text_layer_create(GRect(0, -2,144,70));
 	s_date_layer = text_layer_create(GRect(0, 72,144,30));
 	s_minutes_layer = text_layer_create(GRect(0, 90,144,70));
 	//set color
@@ -113,6 +113,7 @@ static void main_window_load(Window *window) {
 			text_layer_set_text_color(s_date_layer, GColorBlack);
 			text_layer_set_background_color(s_minutes_layer, GColorWhite);
 			text_layer_set_text_color(s_minutes_layer, GColorBlack);
+			window_set_background_color(s_main_window, GColorWhite);
 	    } else {
 		    text_layer_set_background_color(s_hours_layer, GColorBlack);
 			text_layer_set_text_color(s_hours_layer, GColorWhite);
@@ -120,6 +121,7 @@ static void main_window_load(Window *window) {
 			text_layer_set_text_color(s_date_layer, GColorWhite);
 			text_layer_set_background_color(s_minutes_layer, GColorBlack);
 			text_layer_set_text_color(s_minutes_layer, GColorWhite);
+			window_set_background_color(s_main_window, GColorBlack);
 	    }
 	#endif
 	//improve layout
@@ -173,7 +175,7 @@ static void init() {
 	window_stack_push(s_main_window, true);
 	//register with TickTimerService
 	tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
-	//
+	//register receiver for customisation
 	app_message_register_inbox_received((AppMessageInboxReceived) in_recv_handler);
 	app_message_open(app_message_inbox_size_maximum(), app_message_outbox_size_maximum());
 }
