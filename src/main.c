@@ -93,9 +93,9 @@ static void main_window_load(Window *window) {
 	s_time_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_ROBOTO_SLAB_64));
 	s_date_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_ROBOTO_SLAB_20));
 	//create textlayers
-	s_hours_layer = text_layer_create(GRect(0, -5,144,70));
+	s_hours_layer = text_layer_create(GRect(0, 0,144,70));
 	s_date_layer = text_layer_create(GRect(0, 72,144,30));
-	s_minutes_layer = text_layer_create(GRect(0, 95,144,70));
+	s_minutes_layer = text_layer_create(GRect(0, 90,144,70));
 	//set color
 	#ifdef PBL_COLOR
 		text_layer_set_background_color(s_hours_layer, GColorFolly);
