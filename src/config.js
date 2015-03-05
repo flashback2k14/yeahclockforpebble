@@ -1,11 +1,3 @@
-/**
- * https://ninedof.wordpress.com/2014/05/24/pebble-sdk-2-0-tutorial-9-app-configuration/
- * https://github.com/pebble-hacks/js-configure-demo/blob/master/src%2Fjs%2Fpebble-js-app.js
- * https://github.com/pebble-examples/watchface-tutorial/blob/master/src%2Fwatchface-tutorial.c
- * http://www.sitepoint.com/advanced-pebble-watch-configuration/
- * http://developer.getpebble.com/guides/js-apps/pebblekit-js/app-configuration/#tip-use-json-to-transfer-configuration-information
- * http://stackoverflow.com/questions/24230407/creating-a-configuration-page-and-passing-variables-to-a-simply-js-app
- */
 var initialized = false;
 var options = {};
 
@@ -26,15 +18,11 @@ Pebble.addEventListener("webviewclosed", function(e) {
     options = JSON.parse(decodeURIComponent(e.response));
     console.log("Options = " + JSON.stringify(options));
 	//Send to Pebble, persist there
-	Pebble.sendAppMessage({"KEY_INVERT": options.selectInvert},
-      function(e) {
-        console.log("Sending settings data...");
-      },
-      function(e) {
-        console.log("Settings feedback failed!");
-      }
+	Pebble.sendAppMessage({"KEY_INVERT": options.selectInvert, "KEY_SHOW_DATE": options.selectShowDate},
+		function(e) { console.log("Sending settings data..."); },
+		function(e) { console.log("Settings feedback failed!"); }
 	);
   } else {
-    console.log("Cancelled");
+	console.log("Cancelled");
   }
 });

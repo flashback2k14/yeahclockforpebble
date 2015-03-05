@@ -3,6 +3,7 @@
  * define app keys
  */
 #define KEY_INVERT 0
+#define KEY_SHOW_DATE 1
 /**
  * Globals
  */
@@ -12,6 +13,7 @@ static TextLayer *s_minutes_layer;
 static TextLayer *s_date_layer;
 static GFont s_time_font;
 static GFont s_date_font;
+static GFont s_time_wo_date_font;
 /**
  * customise watchface
  */
@@ -46,6 +48,23 @@ static void in_recv_handler(DictionaryIterator *iterator, void *context) {
 					persist_write_bool(KEY_INVERT, false);
 				}
 				break;
+			
+			case KEY_SHOW_DATE:
+				//It's the KEY_SHOW_DATE key
+				if(strcmp(t -> value -> cstring, "on") == 0) {
+					text_layer_set_font(s_hours_layer, s_time_font);
+					text_layer_set_font(s_date_layer, s_date_font);
+					text_layer_set_font(s_minutes_layer,s_time_font);
+					//save show date key
+					persist_write_bool(KEY_SHOW_DATE, true);
+				} else if(strcmp(t -> value -> cstring, "off") == 0) {
+					text_layer_set_font(s_hours_layer, s_time_wo_date_font);
+					text_layer_set_font(s_minutes_layer,s_time_wo_date_font);
+					//save save date key
+					persist_write_bool(KEY_SHOW_DATE, false);
+				}
+				break;
+			
 			default:
 				break;
 		}
@@ -87,51 +106,58 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
  * init Watchface layout
  */
 static void main_window_load(Window *window) {
+	bool inverted = false;
+	bool show_date = false;
 	//check for saved option
- 	bool inverted = persist_read_bool(KEY_INVERT);
+	if (persist_exists(KEY_INVERT)) {
+		inverted = persist_read_bool(KEY_INVERT);
+	}
+ 	if(persist_exists(KEY_SHOW_DATE)) {
+		show_date = persist_read_bool(KEY_SHOW_DATE);	
+	}
 	//create GFont
 	s_time_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_ROBOTO_SLAB_64));
 	s_date_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_ROBOTO_SLAB_20));
+	s_time_wo_date_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_ROBOTO_SLAB_74));
 	//create textlayers
-	s_hours_layer = text_layer_create(GRect(0, -2,144,70));
-	s_date_layer = text_layer_create(GRect(0, 72,144,30));
-	s_minutes_layer = text_layer_create(GRect(0, 90,144,70));
+	if(show_date == true) {
+		s_hours_layer = text_layer_create(GRect(0, -2,144,70));
+		s_date_layer = text_layer_create(GRect(0, 72,144,30));	
+		s_minutes_layer = text_layer_create(GRect(0, 90,144,70));
+	} else {
+		s_hours_layer = text_layer_create(GRect(0, 5,144,70));
+		s_minutes_layer = text_layer_create(GRect(0, 80,144,70));
+	}
 	//set color
-	#ifdef PBL_COLOR
-		text_layer_set_background_color(s_hours_layer, GColorFolly);
+	if(inverted == true) {
+		text_layer_set_background_color(s_hours_layer, GColorWhite);
 		text_layer_set_text_color(s_hours_layer, GColorBlack);
-		text_layer_set_background_color(s_date_layer, GColorBrightGreen);
+		text_layer_set_background_color(s_date_layer, GColorWhite);
 		text_layer_set_text_color(s_date_layer, GColorBlack);
-		text_layer_set_background_color(s_minutes_layer, GColorOrange);
+		text_layer_set_background_color(s_minutes_layer, GColorWhite);
+		text_layer_set_text_color(s_minutes_layer, GColorBlack);
+		window_set_background_color(s_main_window, GColorWhite);
+	} else {
+		text_layer_set_background_color(s_hours_layer, GColorBlack);
+		text_layer_set_text_color(s_hours_layer, GColorWhite);
+		text_layer_set_background_color(s_date_layer, GColorBlack);
+		text_layer_set_text_color(s_date_layer, GColorWhite);
+		text_layer_set_background_color(s_minutes_layer, GColorBlack);
 		text_layer_set_text_color(s_minutes_layer, GColorWhite);
-	#else
-		//Option-specific setup
-		if(inverted == true) {
-		    text_layer_set_background_color(s_hours_layer, GColorWhite);
-			text_layer_set_text_color(s_hours_layer, GColorBlack);
-			text_layer_set_background_color(s_date_layer, GColorWhite);
-			text_layer_set_text_color(s_date_layer, GColorBlack);
-			text_layer_set_background_color(s_minutes_layer, GColorWhite);
-			text_layer_set_text_color(s_minutes_layer, GColorBlack);
-			window_set_background_color(s_main_window, GColorWhite);
-	    } else {
-		    text_layer_set_background_color(s_hours_layer, GColorBlack);
-			text_layer_set_text_color(s_hours_layer, GColorWhite);
-			text_layer_set_background_color(s_date_layer, GColorBlack);
-			text_layer_set_text_color(s_date_layer, GColorWhite);
-			text_layer_set_background_color(s_minutes_layer, GColorBlack);
-			text_layer_set_text_color(s_minutes_layer, GColorWhite);
-			window_set_background_color(s_main_window, GColorBlack);
-	    }
-	#endif
-	//improve layout
-	text_layer_set_font(s_hours_layer, s_time_font);
+		window_set_background_color(s_main_window, GColorBlack);
+	}
+	//set font
+	if(show_date == true) {
+		text_layer_set_font(s_hours_layer, s_time_font);
+		text_layer_set_font(s_date_layer, s_date_font);
+		text_layer_set_font(s_minutes_layer,s_time_font);
+	} else {
+		text_layer_set_font(s_hours_layer, s_time_wo_date_font);
+		text_layer_set_font(s_minutes_layer,s_time_wo_date_font);
+	}
+	//set alignment
 	text_layer_set_text_alignment(s_hours_layer, GTextAlignmentCenter);
-	
-	text_layer_set_font(s_date_layer, s_date_font);
 	text_layer_set_text_alignment(s_date_layer, GTextAlignmentCenter);
-	
-	text_layer_set_font(s_minutes_layer,s_time_font);
 	text_layer_set_text_alignment(s_minutes_layer, GTextAlignmentCenter);
 	//add as child to window
 	layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_hours_layer));
@@ -151,6 +177,7 @@ static void main_window_unload(Window *window) {
 	//unload GFont
 	fonts_unload_custom_font(s_time_font);
 	fonts_unload_custom_font(s_date_font);
+	fonts_unload_custom_font(s_time_wo_date_font);
 }
 /**
  * init watchface
@@ -159,11 +186,7 @@ static void init() {
 	//create main window element and assign to pointer
 	s_main_window = window_create();
 	//set BG Color
-	#ifdef PBL_COLOR
-	  window_set_background_color(s_main_window, GColorDukeBlue);
-	#else
-		window_set_background_color(s_main_window, GColorBlack);
-	#endif
+	window_set_background_color(s_main_window, GColorBlack);
 	//hide system status
 	window_set_fullscreen(s_main_window, true);
 	//set handler to manage elements inside the window
