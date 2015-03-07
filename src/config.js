@@ -18,7 +18,8 @@ Pebble.addEventListener("webviewclosed", function(e) {
     options = JSON.parse(decodeURIComponent(e.response));
     console.log("Options = " + JSON.stringify(options));
 		//Send to Pebble, persist there
-		Pebble.sendAppMessage({"KEY_INVERT": options.selectInvert, "KEY_SHOW_DATE": options.selectShowDate},
+		//Pebble.sendAppMessage({"KEY_INVERT": options.selectInvert, "KEY_SHOW_DATE": options.selectShowDate},
+		Pebble.sendAppMessage({"KEY_INVERT": options.selectInvert},	
 			function(e) { console.log("Sending settings data..."); },
 			function(e) { console.log("Settings feedback failed!"); }
 		);
