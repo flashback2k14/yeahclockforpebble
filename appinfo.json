@@ -6,27 +6,11 @@
     "capabilities": [
         "configurable"
     ],
-    "companyName": "yeahdev@gmail.com",
+    "companyName": "sebastian-kloppe@gmx.de",
     "longName": "Yeah! Clock",
     "projectType": "native",
     "resources": {
         "media": [
-            {
-                "file": "images/icon_28.png",
-                "menuIcon": true,
-                "name": "icon_2",
-                "type": "png"
-            },
-            {
-                "file": "images/icon.png",
-                "name": "icon",
-                "type": "png"
-            },
-            {
-                "file": "fonts/RobotoSlab-Regular.ttf",
-                "name": "ROBOTO_SLAB_74",
-                "type": "font"
-            },
             {
                 "file": "fonts/RobotoSlab-Regular.ttf",
                 "name": "ROBOTO_SLAB_20",
@@ -36,15 +20,21 @@
                 "file": "fonts/RobotoSlab-Regular.ttf",
                 "name": "ROBOTO_SLAB_64",
                 "type": "font"
+            },
+            {
+                "file": "images/icon_28.png",
+                "menuIcon": true,
+                "name": "ICON",
+                "type": "png"
             }
         ]
     },
     "sdkVersion": "2",
     "shortName": "Yeah! Clock",
-    "uuid": "3a78991d-1837-4fa9-adc8-356e8eee8282",
+    "uuid": "108a0909-9ffe-43f3-8fc8-f36bb2edff33",
     "versionCode": 1,
-    "versionLabel": "0.5",
+    "versionLabel": "1.0",
     "watchapp": {
-        "watchface": true
+        "watchface": false
     }
 }
