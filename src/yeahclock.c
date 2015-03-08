@@ -56,27 +56,17 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
 		case KEY_SHOW_DATE:
 			//it's the KEY_SHOW_DATE key
 			if(strcmp(t -> value -> cstring, "on") == 0) {
-				bool inverted = persist_read_bool(KEY_INVERT);
 				//set and save show date
-				if (inverted == true) {
-					text_layer_set_background_color(s_date_layer, GColorWhite);
-					text_layer_set_text_color(s_date_layer, GColorBlack);
-				} else {
-					text_layer_set_background_color(s_date_layer, GColorBlack);
-					text_layer_set_text_color(s_date_layer, GColorWhite);
-				}
+				layer_set_hidden((Layer *) s_date_layer, false);
+				layer_set_frame((Layer *) s_hours_layer, GRect(0,-2,144,70));
+				layer_set_frame((Layer *) s_minutes_layer, GRect(0,92,144,70));
 				//save show date
 				persist_write_bool(KEY_SHOW_DATE, true);
 			} else if(strcmp(t -> value -> cstring, "off") == 0) {
-				bool inverted = persist_read_bool(KEY_INVERT);
 				//set and save hide date
-				if (inverted == true) {
-					text_layer_set_background_color(s_date_layer, GColorWhite);
-					text_layer_set_text_color(s_date_layer, GColorWhite);
-				} else {
-					text_layer_set_background_color(s_date_layer, GColorBlack);
-					text_layer_set_text_color(s_date_layer, GColorBlack);
-				}
+				layer_set_hidden((Layer *) s_date_layer, true);
+				layer_set_frame((Layer *) s_hours_layer, GRect(0,10,144,70));
+				layer_set_frame((Layer *) s_minutes_layer, GRect(0,80,144,70));
 				//save hide date
 				persist_write_bool(KEY_SHOW_DATE, false);
 			} else {
@@ -126,7 +116,6 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
  * init Watchface layout
  */
 static void main_window_load(Window *window) {
-	bool inverted = persist_read_bool(KEY_INVERT);
 	//create GFont
 	s_time_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_ROBOTO_SLAB_64));
 	s_date_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_ROBOTO_SLAB_20));
@@ -135,23 +124,13 @@ static void main_window_load(Window *window) {
 	s_date_layer = text_layer_create(GRect(0, 72,144,40));	
 	s_minutes_layer = text_layer_create(GRect(0, 92,144,70));
 	//set color
-	if (inverted == true) {
-		text_layer_set_background_color(s_hours_layer, GColorWhite);
-		text_layer_set_text_color(s_hours_layer, GColorBlack);
-		text_layer_set_background_color(s_date_layer, GColorWhite);
-		text_layer_set_text_color(s_date_layer, GColorBlack);
-		text_layer_set_background_color(s_minutes_layer, GColorWhite);
-		text_layer_set_text_color(s_minutes_layer, GColorBlack);
-		window_set_background_color(s_main_window, GColorWhite);
-	} else {
-		text_layer_set_background_color(s_hours_layer, GColorBlack);
-		text_layer_set_text_color(s_hours_layer, GColorWhite);
-		text_layer_set_background_color(s_date_layer, GColorBlack);
-		text_layer_set_text_color(s_date_layer, GColorWhite);
-		text_layer_set_background_color(s_minutes_layer, GColorBlack);
-		text_layer_set_text_color(s_minutes_layer, GColorWhite);
-		window_set_background_color(s_main_window, GColorBlack);
-	}
+	text_layer_set_background_color(s_hours_layer, GColorBlack);
+	text_layer_set_text_color(s_hours_layer, GColorWhite);
+	text_layer_set_background_color(s_date_layer, GColorBlack);
+	text_layer_set_text_color(s_date_layer, GColorWhite);
+	text_layer_set_background_color(s_minutes_layer, GColorBlack);
+	text_layer_set_text_color(s_minutes_layer, GColorWhite);
+	window_set_background_color(s_main_window, GColorBlack);
 	//set font
 	text_layer_set_font(s_hours_layer, s_time_font);
 	text_layer_set_font(s_date_layer, s_date_font);
