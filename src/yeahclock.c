@@ -53,13 +53,42 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
 				APP_LOG(APP_LOG_LEVEL_ERROR, "KEY INVERT - no valid information received!");
 			}		
       break;
+		case KEY_SHOW_DATE:
+			//it's the KEY_SHOW_DATE key
+			if(strcmp(t -> value -> cstring, "on") == 0) {
+				bool inverted = persist_read_bool(KEY_INVERT);
+				//set and save show date
+				if (inverted == true) {
+					text_layer_set_background_color(s_date_layer, GColorWhite);
+					text_layer_set_text_color(s_date_layer, GColorBlack);
+				} else {
+					text_layer_set_background_color(s_date_layer, GColorBlack);
+					text_layer_set_text_color(s_date_layer, GColorWhite);
+				}
+				//save show date
+				persist_write_bool(KEY_SHOW_DATE, true);
+			} else if(strcmp(t -> value -> cstring, "off") == 0) {
+				bool inverted = persist_read_bool(KEY_INVERT);
+				//set and save hide date
+				if (inverted == true) {
+					text_layer_set_background_color(s_date_layer, GColorWhite);
+					text_layer_set_text_color(s_date_layer, GColorWhite);
+				} else {
+					text_layer_set_background_color(s_date_layer, GColorBlack);
+					text_layer_set_text_color(s_date_layer, GColorBlack);
+				}
+				//save hide date
+				persist_write_bool(KEY_SHOW_DATE, false);
+			} else {
+				APP_LOG(APP_LOG_LEVEL_ERROR, "KEY_SHOW_DATE - no valid information received!");
+			}	
+			break;
     default:
       APP_LOG(APP_LOG_LEVEL_ERROR, "Key %d not recognized!", (int)t->key);
     }
-    // Look for next item
+    //look for next item
     t = dict_read_next(iterator);
   }
-	APP_LOG(APP_LOG_LEVEL_DEBUG, "end inbox_received_callback");
 }
 /**
  * update time function
