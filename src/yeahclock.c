@@ -1,18 +1,20 @@
 #include <pebble.h>
+#include "customize.h"	
 /**
  * define app keys
  */
-enum {
-  KEY_INVERT = 0,
-  KEY_SHOW_DATE = 1
-};
+//enum {
+//  KEY_INVERT = 0,
+//  KEY_SHOW_DATE = 1
+//};
 /**
  * Globals
  */
-static Window *s_main_window;
-static TextLayer *s_hours_layer;
-static TextLayer *s_minutes_layer;
-static TextLayer *s_date_layer;
+//static Window *s_main_window;
+//static TextLayer *s_hours_layer;
+//static TextLayer *s_minutes_layer;
+//static TextLayer *s_date_layer;
+//static TextLayer *s_batt_layer;
 static GFont s_time_font;
 static GFont s_date_font;
 /**
@@ -24,26 +26,31 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
   // for all items
   while(t != NULL) {
     // which key was received?
-    switch(t->key) {
+    perform_customisation(t);
+		/*switch(t->key) {
     case KEY_INVERT:
 			//it's the KEY_INVERT key
-			if(strcmp(t -> value -> cstring, "on") == 0) {
+			if (strcmp(t -> value -> cstring, "on") == 0) {
 				//set and save as inverted
 				text_layer_set_background_color(s_hours_layer, GColorWhite);
 				text_layer_set_text_color(s_hours_layer, GColorBlack);
 				text_layer_set_background_color(s_date_layer, GColorWhite);
 				text_layer_set_text_color(s_date_layer, GColorBlack);
+				text_layer_set_background_color(s_batt_layer, GColorWhite);
+				text_layer_set_text_color(s_batt_layer, GColorBlack);
 				text_layer_set_background_color(s_minutes_layer, GColorWhite);
 				text_layer_set_text_color(s_minutes_layer, GColorBlack);
 				window_set_background_color(s_main_window, GColorWhite);
 				//save invert key
 				persist_write_bool(KEY_INVERT, true);
-			} else if(strcmp(t -> value -> cstring, "off") == 0) {
+			} else if (strcmp(t -> value -> cstring, "off") == 0) {
 				//set and save as not inverted
 				text_layer_set_background_color(s_hours_layer, GColorBlack);
 				text_layer_set_text_color(s_hours_layer, GColorWhite);
 				text_layer_set_background_color(s_date_layer, GColorBlack);
 				text_layer_set_text_color(s_date_layer, GColorWhite);
+				text_layer_set_background_color(s_batt_layer, GColorBlack);
+				text_layer_set_text_color(s_batt_layer, GColorWhite);
 				text_layer_set_background_color(s_minutes_layer, GColorBlack);
 				text_layer_set_text_color(s_minutes_layer, GColorWhite);
 				window_set_background_color(s_main_window, GColorBlack);
@@ -55,18 +62,23 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
       break;
 		case KEY_SHOW_DATE:
 			//it's the KEY_SHOW_DATE key
-			if(strcmp(t -> value -> cstring, "on") == 0) {
+			if (strcmp(t -> value -> cstring, "on") == 0) {
 				//set and save show date
 				layer_set_hidden((Layer *) s_date_layer, false);
+				layer_set_hidden((Layer *) s_batt_layer, true);
 				layer_set_frame((Layer *) s_hours_layer, GRect(0,-2,144,70));
 				layer_set_frame((Layer *) s_minutes_layer, GRect(0,92,144,70));
 				//save show date
 				persist_write_bool(KEY_SHOW_DATE, true);
-			} else if(strcmp(t -> value -> cstring, "off") == 0) {
-				//set and save hide date
-				layer_set_hidden((Layer *) s_date_layer, true);
+			} else if (strcmp(t -> value -> cstring, "off") == 0) {
+				//set and save hide date*/
+				/*layer_set_hidden((Layer *) s_date_layer, true);
 				layer_set_frame((Layer *) s_hours_layer, GRect(0,10,144,70));
-				layer_set_frame((Layer *) s_minutes_layer, GRect(0,80,144,70));
+				layer_set_frame((Layer *) s_minutes_layer, GRect(0,80,144,70));*/
+				/*layer_set_hidden((Layer *) s_date_layer, true);
+				layer_set_hidden((Layer *) s_batt_layer, false);
+				layer_set_frame((Layer *) s_hours_layer, GRect(0,-2,144,70));
+				layer_set_frame((Layer *) s_minutes_layer, GRect(0,92,144,70));
 				//save hide date
 				persist_write_bool(KEY_SHOW_DATE, false);
 			} else {
@@ -75,7 +87,7 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
 			break;
     default:
       APP_LOG(APP_LOG_LEVEL_ERROR, "Key %d not recognized!", (int)t->key);
-    }
+    }*/
     //look for next item
     t = dict_read_next(iterator);
   }
@@ -92,7 +104,7 @@ static void update_time() {
 	static char buffer_min[] = "00";
 	static char buffer_date[] = "Mon, 01.01.15";
 	// Write the current hours and minutes into the buffer
-	if(clock_is_24h_style() == true) {
+	if (clock_is_24h_style() == true) {
 		// Use 24 hour format
 		strftime(buffer_h, sizeof("00"), "%H", tick_time);
 	} else {
@@ -122,29 +134,40 @@ static void main_window_load(Window *window) {
 	//create textlayers
 	s_hours_layer = text_layer_create(GRect(0, -2,144,70));
 	s_date_layer = text_layer_create(GRect(0, 72,144,40));	
+	s_batt_layer = text_layer_create(GRect(0, 72,144,40));
 	s_minutes_layer = text_layer_create(GRect(0, 92,144,70));
 	//set color
 	text_layer_set_background_color(s_hours_layer, GColorBlack);
 	text_layer_set_text_color(s_hours_layer, GColorWhite);
 	text_layer_set_background_color(s_date_layer, GColorBlack);
 	text_layer_set_text_color(s_date_layer, GColorWhite);
+	text_layer_set_background_color(s_batt_layer, GColorBlack);
+	text_layer_set_text_color(s_batt_layer, GColorWhite);
 	text_layer_set_background_color(s_minutes_layer, GColorBlack);
 	text_layer_set_text_color(s_minutes_layer, GColorWhite);
 	window_set_background_color(s_main_window, GColorBlack);
 	//set font
 	text_layer_set_font(s_hours_layer, s_time_font);
 	text_layer_set_font(s_date_layer, s_date_font);
+	text_layer_set_font(s_batt_layer, s_date_font);
 	text_layer_set_font(s_minutes_layer, s_time_font);
 	//set alignment
 	text_layer_set_text_alignment(s_hours_layer, GTextAlignmentCenter);
 	text_layer_set_text_alignment(s_date_layer, GTextAlignmentCenter);
+	text_layer_set_text_alignment(s_batt_layer, GTextAlignmentCenter);
 	text_layer_set_text_alignment(s_minutes_layer, GTextAlignmentCenter);
 	//add as child to window
 	layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_hours_layer));
 	layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_date_layer));
+	layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_batt_layer));
 	layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_minutes_layer));
 	//Make sure the time is displayed from the start
 	update_time();
+	//Get info, copy to long-lived buffer and display
+	BatteryChargeState state = battery_state_service_peek();
+	static char buffer[] = "Batt: 100";
+	snprintf(buffer, sizeof("Batt: 100"), "Batt: %d", state.charge_percent);
+	text_layer_set_text(s_batt_layer, buffer);
 }
 /**
  * deinit Watchface layout
@@ -154,6 +177,7 @@ static void main_window_unload(Window *window) {
 	text_layer_destroy(s_hours_layer);
 	text_layer_destroy(s_minutes_layer);
 	text_layer_destroy(s_date_layer);
+	text_layer_destroy(s_batt_layer);
 	//unload GFont
 	fonts_unload_custom_font(s_time_font);
 	fonts_unload_custom_font(s_date_font);

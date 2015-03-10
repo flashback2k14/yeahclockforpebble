@@ -12,6 +12,11 @@
     "resources": {
         "media": [
             {
+                "file": "images/icon_144.png",
+                "name": "ICON_144",
+                "type": "png"
+            },
+            {
                 "file": "fonts/RobotoSlab-Regular.ttf",
                 "name": "ROBOTO_SLAB_20",
                 "type": "font"
@@ -24,7 +29,7 @@
             {
                 "file": "images/icon_28.png",
                 "menuIcon": true,
-                "name": "ICON",
+                "name": "ICON_28",
                 "type": "png"
             }
         ]
@@ -33,7 +38,7 @@
     "shortName": "Yeah! Clock",
     "uuid": "108a0909-9ffe-43f3-8fc8-f36bb2edff33",
     "versionCode": 1,
-    "versionLabel": "1.0",
+    "versionLabel": "1.1",
     "watchapp": {
         "watchface": true
     }
