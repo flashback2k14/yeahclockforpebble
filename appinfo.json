@@ -1,7 +1,9 @@
 {
     "appKeys": {
         "KEY_INVERT": 0,
-        "KEY_SHOW_DATE": 1
+        "KEY_SHOW_DATE_BATT": 1,
+        "KEY_USE_BATT": 3,
+        "KEY_USE_DATE": 2
     },
     "capabilities": [
         "configurable"
