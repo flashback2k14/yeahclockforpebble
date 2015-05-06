@@ -16,14 +16,18 @@ Pebble.addEventListener("webviewclosed", function(e) {
   //JSON validity and non-empty check
   if (e.response.charAt(0) === "{" && e.response.slice(-1) === "}" && e.response.length > 5) {
     options = JSON.parse(decodeURIComponent(e.response));
-    console.log("Options = " + JSON.stringify(options));
+		console.log("Options: " + JSON.stringify(options));
 		//Send to Pebble, persist there
-		Pebble.sendAppMessage({"KEY_INVERT": options.selectInvert, "KEY_SHOW_DATE": options.selectShowDate},
-		//Pebble.sendAppMessage({"KEY_INVERT": options.selectInvert},	
-			function(e) { console.log("Sending settings data..."); },
-			function(e) { console.log("Settings feedback failed!"); }
-		);
+		Pebble.sendAppMessage({"KEY_INVERT": options.selectInvert, "KEY_SHOW_DATE": options.selectShowDate}, onSuccess, onError);
   } else {
 		console.log("Cancelled");
   }
 });
+
+function onSuccess(e) {
+	console.log("Sending settings data...");
+}
+
+function onError(e) {
+	console.log("Settings feedback failed!");
+}
