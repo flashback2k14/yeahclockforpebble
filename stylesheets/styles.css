@@ -21,7 +21,7 @@
   color: #fff;
   font-size: 42px;
   font-weight: 700;
-  text-shadow: #111 0px 0px 10px;
+  text-shadow: #111 0 0 10px;
 }
 #forkme_banner {
   display: block;
@@ -46,22 +46,24 @@
   margin: 20px;
   height: 100%;
 }
+.styleP {
+  margin-top: 0;
+  margin-bottom: 30px;
+}
 /*footer*/
 #footer_wrap {
   background: #212121;
   position: fixed !important;
-  bottom:0px;
-  left:0px;
-  right:0px;
-  margin-bottom:0px;
+  bottom:0;
+  left:0;
+  right:0;
+  margin-bottom:0;
 }
 footer p {color: #f2f2f2;}
 a {
   text-decoration: none;
   color: #007edf;
   text-shadow: none;
-  transition: color 0.5s ease;
-  transition: text-shadow 0.5s ease;
   -webkit-transition: color 0.5s ease;
   -webkit-transition: text-shadow 0.5s ease;
   -moz-transition: color 0.5s ease;
@@ -70,6 +72,8 @@ a {
   -o-transition: text-shadow 0.5s ease;
   -ms-transition: color 0.5s ease;
   -ms-transition: text-shadow 0.5s ease;
+  transition: color 0.5s ease;
+  transition: text-shadow 0.5s ease;
 }
 a:hover, a:focus {text-decoration: underline;}
 footer a {
