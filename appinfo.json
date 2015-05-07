@@ -2,10 +2,11 @@
     "appKeys": {
         "KEY_CONDITIONS": 3,
         "KEY_INVERT": 0,
-        "KEY_SHOW_DATE_BATT": 1,
+        "KEY_SHOW_DATE_WEATHER": 1,
         "KEY_TEMPERATURE": 2
     },
     "capabilities": [
+        "location",
         "configurable"
     ],
     "companyName": "sebastian-kloppe@gmx.de",
