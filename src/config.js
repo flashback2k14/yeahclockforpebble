@@ -23,7 +23,7 @@ function locationSuccess(pos) {
   //construct URL
   var url = 'http://api.openweathermap.org/data/2.5/weather?lat=' +
       pos.coords.latitude + '&lon=' + pos.coords.longitude;
-	//console.log('DEBUG: Url: ' + url);
+	console.log('DEBUG: Url: ' + url);
   //send request to OpenWeatherMap
   xhrRequest(url, 'GET', 
     function(responseText) {
@@ -33,11 +33,10 @@ function locationSuccess(pos) {
       weatherInfo.temperature = Math.round(json.main.temp - 273.15);
       //conditions
       weatherInfo.conditions = json.weather[0].main;      
-			//console.log('DEBUG: Temperature is ' + weatherInfo.temperature);
-      //console.log('DEBUG: Conditions are ' + weatherInfo.conditions);
+			console.log('DEBUG: Temperature is ' + weatherInfo.temperature);
+      console.log('DEBUG: Conditions are ' + weatherInfo.conditions);
     }      
   );
-	
 	//send to Pebble
 	Pebble.sendAppMessage(
 		{"KEY_TEMPERATURE": weatherInfo.temperature, "KEY_CONDITIONS": weatherInfo.conditions},
@@ -56,7 +55,7 @@ function locationError(err) {
 
 //get weather
 function getWeather() {
-  console.log('getWeather entered');
+	console.log('DEBUG: getWeather entered');
 	navigator.geolocation.getCurrentPosition(
     locationSuccess,
     locationError,
@@ -106,6 +105,6 @@ Pebble.addEventListener("webviewclosed", function(e) {
 			}
 		);
   } else {
-		console.log("Cancelled");
+		console.log("webviewclosed: Cancelled");
   }
 });

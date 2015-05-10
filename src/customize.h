@@ -4,7 +4,7 @@
 #define CUSTOMIZE_H
 	
 #define ANIM_DURATION 1500
-#define ANIM_DELAY 1000*60*5
+#define ANIM_DELAY 1000*60
 #define ANIM_DELAY_RESTART 100	
 	
 //enum for customisation
@@ -40,6 +40,6 @@ extern bool restartAnimationCurr;
 
 //global methods
 void updateLineDateToWeather(Line *line);
-void perform_customisation(Tuple *t);
+extern void perform_customisation(Tuple *t);
 	
 #endif

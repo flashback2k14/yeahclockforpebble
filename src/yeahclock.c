@@ -7,6 +7,7 @@
  */
 bool restartAnimationNext = 1;
 bool restartAnimationCurr = 1;
+void perform_customisation(Tuple *t);
 /**
  * animation
  */
@@ -14,28 +15,34 @@ bool restartAnimationCurr = 1;
  * animation handler
  */
 static void animationStoppedHandler(struct Animation *animation, bool finished, void *context) {
-#ifdef PBL_PLATFORM_APLITE
+	APP_LOG(APP_LOG_LEVEL_INFO, "inside animationStoppedHandler");
+	
+	#ifdef PBL_PLATFORM_APLITE
 		//free animation
 		property_animation_destroy((PropertyAnimation *) animation);
-#endif
+	#endif
 	//
 	Layer *textLayer = text_layer_get_layer((TextLayer *)context);
 	GRect rect = layer_get_frame(textLayer);
 	rect.origin.x = 144;
 	layer_set_frame(textLayer, rect);
 	//
-	if (finished) {
-		updateLineDateToWeather(&line_date_weather);
-	}
+	#ifdef PBL_PLATFORM_APLITE
+		if (finished) {
+			updateLineDateToWeather(&line_date_weather);
+		}
+	#endif
 }
 /**
  * animate line
  */
 static void makeAnimationsForLayers(Line *line, TextLayer *current, TextLayer *next) {
+	APP_LOG(APP_LOG_LEVEL_INFO, "inside makeAnimationsForLayers");
+	//get next layer bounds
 	GRect fromRect = layer_get_frame(text_layer_get_layer(next));
 	GRect toRect = fromRect;
 	toRect.origin.x -= 144;
-	
+	//animation next layer
 	line->s_next_animation = property_animation_create_layer_frame(text_layer_get_layer(next), &fromRect, &toRect);
 	animation_set_duration((Animation *)line->s_next_animation, ANIM_DURATION);
 	if (restartAnimationNext == 0) {
@@ -45,12 +52,13 @@ static void makeAnimationsForLayers(Line *line, TextLayer *current, TextLayer *n
 		animation_set_delay((Animation *)line->s_next_animation, ANIM_DELAY);
 	}
 	animation_set_curve((Animation *)line->s_next_animation, AnimationCurveEaseOut);
-	animation_schedule((Animation *)line->s_next_animation);
-	
+	//start animation process next Layer
+	if (!animation_is_scheduled((Animation *)line->s_next_animation)) animation_schedule((Animation *)line->s_next_animation);
+	//get current layer bounds
 	GRect fromRect2 = layer_get_frame(text_layer_get_layer(current));
 	GRect toRect2 = fromRect2;
 	toRect2.origin.x -= 144;
-	
+	//animation current layer
 	line->s_curr_animation = property_animation_create_layer_frame(text_layer_get_layer(current), &fromRect2, &toRect2);
 	animation_set_duration((Animation *)line->s_curr_animation, ANIM_DURATION);
 	if (restartAnimationCurr == 0) {
@@ -60,17 +68,18 @@ static void makeAnimationsForLayers(Line *line, TextLayer *current, TextLayer *n
 		animation_set_delay((Animation *)line->s_curr_animation, ANIM_DELAY);
 	}
 	animation_set_curve((Animation *)line->s_curr_animation, AnimationCurveEaseOut);
-	
+	//set animation stop handler
 	animation_set_handlers((Animation *)line->s_curr_animation, (AnimationHandlers) {
 		.stopped = (AnimationStoppedHandler)animationStoppedHandler
 	}, current);
-	
-	animation_schedule((Animation *)line->s_curr_animation);
+	//start animation process current layer
+	if (!animation_is_scheduled((Animation *)line->s_curr_animation)) animation_schedule((Animation *)line->s_curr_animation);
 }
 /**
  * update line
  */
 void updateLineDateToWeather(Line *line) {
+	APP_LOG(APP_LOG_LEVEL_INFO, "inside updateLineDateToWeather");
 	TextLayer *next, *current;
 	
 	GRect rect = layer_get_frame(text_layer_get_layer(line->s_anim_curr_layer));
@@ -93,8 +102,14 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
     t = dict_read_next(iterator);
   }
 	//assemble weather information and display
-	snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "%s, %s", temperature_buffer, conditions_buffer);
-	text_layer_set_text(line_date_weather.s_anim_next_layer, weather_layer_buffer);
+	APP_LOG(APP_LOG_LEVEL_INFO, "conditions_buffer: %s", conditions_buffer);
+	if (strcmp(conditions_buffer, "") == 0) {
+		//set placeholder text for weather informations
+		text_layer_set_text(line_date_weather.s_anim_next_layer, "Loading...");
+	} else {
+		snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "%s, %s", temperature_buffer, conditions_buffer);
+		text_layer_set_text(line_date_weather.s_anim_next_layer, weather_layer_buffer);
+	}
 }
 /**
  * eventhandler for weather
@@ -135,6 +150,11 @@ static void update_time() {
 	text_layer_set_text(s_hours_layer, buffer_h);	
 	text_layer_set_text(s_minutes_layer, buffer_min);
 	text_layer_set_text(line_date_weather.s_anim_curr_layer, buffer_date);
+	//
+	APP_LOG(APP_LOG_LEVEL_INFO, "before updateLineDateToWeather in update_time");
+	#ifndef PBL_PLATFORM_APLITE
+		updateLineDateToWeather(&line_date_weather);
+	#endif
 }
 /**
  * call AppMessage Outbox send
@@ -202,7 +222,9 @@ static void main_window_load(Window *window) {
 	//make sure the time is displayed from the start
 	update_time();
 	//start animation loop
-	updateLineDateToWeather(&line_date_weather);
+	#ifdef PBL_PLATFORM_APLITE
+		updateLineDateToWeather(&line_date_weather);
+	#endif
 }
 /**
  * deinit Watchface layout
@@ -226,9 +248,9 @@ static void init() {
 	//set BG Color
 	window_set_background_color(s_main_window, GColorBlack);
 	//hide system status
-#ifdef PBL_SDK_2
-	window_set_fullscreen(s_main_window, true);
-#endif
+	#ifdef PBL_SDK_2
+		window_set_fullscreen(s_main_window, true);
+	#endif
 	//set handler to manage elements inside the window
 	window_set_window_handlers(s_main_window, (WindowHandlers) {
 		.load = main_window_load,
@@ -249,6 +271,7 @@ static void init() {
  * deinit watchface
  */
 static void deinit() {
+	app_message_deregister_callbacks();
 	//stop any animation in progress
   animation_unschedule_all();
 	//unsubscribe timer service

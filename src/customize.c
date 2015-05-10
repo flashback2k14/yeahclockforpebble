@@ -72,12 +72,12 @@ void perform_customisation(Tuple *t) {
 		
 		case KEY_TEMPERATURE:
 			snprintf(temperature_buffer, sizeof(temperature_buffer), "%dC", (int)t->value->int32);
-			//APP_LOG(APP_LOG_LEVEL_INFO, "perform_customisation: %d", (int)t->value->int32);
+			APP_LOG(APP_LOG_LEVEL_INFO, "perform_customisation: %d", (int)t->value->int32);
       break;
 		
     case KEY_CONDITIONS:
 			snprintf(conditions_buffer, sizeof(conditions_buffer), "%s", t->value->cstring);
-			//APP_LOG(APP_LOG_LEVEL_INFO, "perform_customisation: %s", t->value->cstring);
+			APP_LOG(APP_LOG_LEVEL_INFO, "perform_customisation: %s", t->value->cstring);
       break;
 		
 		default:
