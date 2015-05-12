@@ -1,7 +1,14 @@
 #include <pebble.h>
+#include "global.h"	
 #include "customize.h"
+#include "layeranimation.h"
 
-
+	
+char temperature_buffer[8];
+char conditions_buffer[32];
+char weather_layer_buffer[32];
+	
+	
 void perform_customisation(Tuple *t) {
 	//which key was received?
 	switch(t->key) {
@@ -10,28 +17,28 @@ void perform_customisation(Tuple *t) {
 			//it's the KEY_INVERT key
 			if (strcmp(t -> value -> cstring, "on") == 0) {
 				//set and save as inverted
-				text_layer_set_background_color(s_hours_layer, GColorWhite);
-				text_layer_set_text_color(s_hours_layer, GColorBlack);
-				text_layer_set_background_color(s_minutes_layer, GColorWhite);
-				text_layer_set_text_color(s_minutes_layer, GColorBlack);
-				text_layer_set_background_color(line_date_weather.s_anim_curr_layer, GColorWhite);
-				text_layer_set_text_color(line_date_weather.s_anim_curr_layer, GColorBlack);
-				text_layer_set_background_color(line_date_weather.s_anim_next_layer, GColorWhite);
-				text_layer_set_text_color(line_date_weather.s_anim_next_layer, GColorBlack);
-				window_set_background_color(s_main_window, GColorWhite);
+				text_layer_set_background_color(hours_layer, GColorWhite);
+				text_layer_set_text_color(hours_layer, GColorBlack);
+				text_layer_set_background_color(minutes_layer, GColorWhite);
+				text_layer_set_text_color(minutes_layer, GColorBlack);
+				text_layer_set_background_color(line_date_weather.date_layer, GColorWhite);
+				text_layer_set_text_color(line_date_weather.date_layer, GColorBlack);
+				text_layer_set_background_color(line_date_weather.weather_layer, GColorWhite);
+				text_layer_set_text_color(line_date_weather.weather_layer, GColorBlack);
+				window_set_background_color(main_window, GColorWhite);
 				//save invert key
 				persist_write_bool(KEY_INVERT, true);
 			} else if (strcmp(t -> value -> cstring, "off") == 0) {
 				//set and save as not inverted
-				text_layer_set_background_color(s_hours_layer, GColorBlack);
-				text_layer_set_text_color(s_hours_layer, GColorWhite);
-				text_layer_set_background_color(s_minutes_layer, GColorBlack);
-				text_layer_set_text_color(s_minutes_layer, GColorWhite);
-				text_layer_set_background_color(line_date_weather.s_anim_curr_layer, GColorBlack);
-				text_layer_set_text_color(line_date_weather.s_anim_curr_layer, GColorWhite);
-				text_layer_set_background_color(line_date_weather.s_anim_next_layer, GColorBlack);
-				text_layer_set_text_color(line_date_weather.s_anim_next_layer, GColorWhite);
-				window_set_background_color(s_main_window, GColorBlack);
+				text_layer_set_background_color(hours_layer, GColorBlack);
+				text_layer_set_text_color(hours_layer, GColorWhite);
+				text_layer_set_background_color(minutes_layer, GColorBlack);
+				text_layer_set_text_color(minutes_layer, GColorWhite);
+				text_layer_set_background_color(line_date_weather.date_layer, GColorBlack);
+				text_layer_set_text_color(line_date_weather.date_layer, GColorWhite);
+				text_layer_set_background_color(line_date_weather.weather_layer, GColorBlack);
+				text_layer_set_text_color(line_date_weather.weather_layer, GColorWhite);
+				window_set_background_color(main_window, GColorBlack);
 				//save invert key
 				persist_write_bool(KEY_INVERT, false);
 			} else {
@@ -43,26 +50,29 @@ void perform_customisation(Tuple *t) {
 			//it's the KEY_SHOW_DATE_WEATHER key
 			if (strcmp(t -> value -> cstring, "on") == 0) {
 				//restart animations
-				restartAnimationNext = 0;
-				restartAnimationCurr = 0;
-				updateLineDateToWeather(&line_date_weather);
+				restartAnimation = 0;
+				start_animation_process(&line_date_weather);
 				//set and save show date and Weather layer				
-				layer_set_hidden((Layer *) line_date_weather.s_anim_curr_layer, false);
-				layer_set_hidden((Layer *) line_date_weather.s_anim_next_layer, false);
+				layer_set_hidden((Layer *) line_date_weather.date_layer, false);
+				layer_set_hidden((Layer *) line_date_weather.weather_layer, false);
 				//set new position for hours and minutes layer
-				layer_set_frame((Layer *) s_hours_layer, GRect(0,-2,144,70));
-				layer_set_frame((Layer *) s_minutes_layer, GRect(0,92,144,70));
+				layer_set_frame((Layer *) hours_layer, GRect(0,-2,144,70));
+				layer_set_frame((Layer *) minutes_layer, GRect(0,92,144,70));
 				//save show date
 				persist_write_bool(KEY_SHOW_DATE_WEATHER, true);
 			} else if (strcmp(t -> value -> cstring, "off") == 0) {
 				//stop any animation in progress
-				animation_unschedule_all();
+				#ifdef PBL_PLATFORM_APLITE
+					property_animation_destroy(line_date_weather.go_to_right_anim);
+					property_animation_destroy(line_date_weather.from_the_left_anim);
+				#endif
+				restartAnimation = 1;
 				//set and save hide date and weather layer
-				layer_set_hidden((Layer *) line_date_weather.s_anim_curr_layer, true);
-				layer_set_hidden((Layer *) line_date_weather.s_anim_next_layer, true);
+				layer_set_hidden((Layer *) line_date_weather.date_layer, true);
+				layer_set_hidden((Layer *) line_date_weather.weather_layer, true);
 				//set new position for hours and minutes layer
-				layer_set_frame((Layer *) s_hours_layer, GRect(0,10,144,70));
-				layer_set_frame((Layer *) s_minutes_layer, GRect(0,80,144,70));
+				layer_set_frame((Layer *) hours_layer, GRect(0,10,144,70));
+				layer_set_frame((Layer *) minutes_layer, GRect(0,80,144,70));
 				//save hide date
 				persist_write_bool(KEY_SHOW_DATE_WEATHER, false);
 			} else {

@@ -29,11 +29,15 @@ function locationSuccess(pos) {
     function(responseText) {
       //responseText contains a JSON object with weather info
       var json = JSON.parse(responseText);
-      //temperature in Kelvin requires adjustment
-      weatherInfo.temperature = Math.round(json.main.temp - 273.15);
+      //temperature in Kelvin requires adjustment to grad celsius
+			// convert to fahrenheit F = C x 1.8 + 32
+			var gradCelsius = Math.round(json.main.temp - 273.15);
+			var fahrenheit = Math.round((gradCelsius * 1.8) + 32);
+      weatherInfo.temperature = gradCelsius;
       //conditions
       weatherInfo.conditions = json.weather[0].main;      
-			console.log('DEBUG: Temperature is ' + weatherInfo.temperature);
+			console.log('DEBUG: Temperature is C ' + weatherInfo.temperature);
+			console.log('DEBUG: Temperature is F ' + fahrenheit);
       console.log('DEBUG: Conditions are ' + weatherInfo.conditions);
     }      
   );
@@ -70,7 +74,7 @@ function getWeather() {
 Pebble.addEventListener("ready", function() {
   console.log("ready called!");
   initialized = true;
-	getWeather();
+	//getWeather();
 });
 
 //listen for when an AppMessage is received

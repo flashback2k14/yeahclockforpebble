@@ -40,12 +40,10 @@
     "sdkVersion": "3",
     "shortName": "Yeah! Clock",
     "targetPlatforms": [
-        "aplite",
         "basalt"
     ],
     "uuid": "108a0909-9ffe-43f3-8fc8-f36bb2edff33",
-    "versionCode": 1,
-    "versionLabel": "1.2",
+    "versionLabel": "1.4",
     "watchapp": {
         "watchface": true
     }
