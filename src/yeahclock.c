@@ -152,12 +152,12 @@ static void main_window_load(Window *window) {
 	layer_add_child(window_get_root_layer(window), text_layer_get_layer(line_date_weather.date_layer));
 	layer_add_child(window_get_root_layer(window), text_layer_get_layer(line_date_weather.weather_layer));
 	
+	//make sure the time is displayed from the start
+	update_time();
 	//start animation loop
 	#ifdef PBL_PLATFORM_APLITE
 		init_animations_aplite(&line_date_weather);
 	#endif
-	//make sure the time is displayed from the start
-	update_time();
 }
 
 /**
@@ -212,9 +212,9 @@ static void init() {
  * deinit watchface
  */
 static void deinit() {
-	//app_message_deregister_callbacks();
-  //animation_unschedule_all();
-	//tick_timer_service_unsubscribe();
+	app_message_deregister_callbacks();
+  animation_unschedule_all();
+	tick_timer_service_unsubscribe();
 	window_destroy(main_window);
 }
 

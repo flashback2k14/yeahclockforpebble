@@ -74,7 +74,7 @@ function getWeather() {
 Pebble.addEventListener("ready", function() {
   console.log("ready called!");
   initialized = true;
-	//getWeather();
+	getWeather();
 });
 
 //listen for when an AppMessage is received
