@@ -48,7 +48,7 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
 	APP_LOG(APP_LOG_LEVEL_INFO, "conditions_buffer: %s", conditions_buffer);
 	if (strcmp(conditions_buffer, "") == 0) {
 		//set placeholder text for weather informations
-		text_layer_set_text(line_date_weather.weather_layer, "hack o'clock...");
+		text_layer_set_text(line_date_weather.weather_layer, "Loading...");
 	} else {
 		snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "%s, %s", temperature_buffer, conditions_buffer);
 		text_layer_set_text(line_date_weather.weather_layer, weather_layer_buffer);
@@ -73,7 +73,7 @@ static void outbox_sent_callback(DictionaryIterator *iterator, void *context) {
 /**
  * call AppMessage Outbox send
  */
-static void callAppMessageOutboxSend() {
+static void call_app_message_outbox_send() {
 	//begin dictionary
 	DictionaryIterator *iter;
 	app_message_outbox_begin(&iter);
@@ -113,7 +113,7 @@ static void update_time() {
 	//start animation process every 2 minutes
 	int min = tick_time->tm_min;
 	if (((min % 2) == 0) == (restartAnimation == 0))  {
-		callAppMessageOutboxSend();
+		call_app_message_outbox_send();
 		start_animation_process(&line_date_weather);
 	}
 }

@@ -121,10 +121,10 @@ void schedule_animation(Line *line) {
 void start_animation_process(Line *line) {
 	APP_LOG(APP_LOG_LEVEL_INFO, "start_animation_process");
 	//
-	#ifndef PBL_PLATFORM_APLITE
-		init_animations_basalt(line);
-	#else
+	#ifdef PBL_PLATFORM_APLITE
 		init_animations_aplite(line);
+	#else
+		init_animations_basalt(line);
 	#endif	
 	schedule_animation(line);
 }
