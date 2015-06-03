@@ -7,17 +7,19 @@
  * Initialisation for Aplite
  */
 void animationStoppedHandler(Animation *anim, bool finished, void *context){
-	APP_LOG(APP_LOG_LEVEL_INFO, "inside animationStoppedHandler");
+	//APP_LOG(APP_LOG_LEVEL_INFO, "inside animationStoppedHandler");
 	property_animation_destroy((PropertyAnimation *) anim);
 }	
 	
 void init_animations_aplite(Line *line) {
-	APP_LOG(APP_LOG_LEVEL_INFO, "inside init_animations_aplite");
+	//APP_LOG(APP_LOG_LEVEL_INFO, "inside init_animations_aplite");
 	Layer *layer_date = text_layer_get_layer(line->date_layer);
 	Layer *layer_weather = text_layer_get_layer(line->weather_layer);
 	
 	if (isDateShown == 0) {
-		APP_LOG(APP_LOG_LEVEL_INFO, "inside IF isDateShown");
+		//APP_LOG(APP_LOG_LEVEL_INFO, "inside IF isDateShown");
+		isDateShown = 1;
+		
 		line->go_to_right_anim = property_animation_create_layer_frame(layer_date, &START_PLACE_MR_RECT, &TO_RIGHT_MR_RECT);
 		animation_set_duration((Animation*) line->go_to_right_anim, ANIM_DURATION);
 		animation_set_curve((Animation*) line->go_to_right_anim, AnimationCurveEaseOut);
@@ -33,10 +35,10 @@ void init_animations_aplite(Line *line) {
 			.stopped = (AnimationStoppedHandler) animationStoppedHandler
 		};
 		animation_set_handlers((Animation *) line->go_to_right_anim, handlerWeather, NULL);
-		
-		isDateShown = 1;
 	} else {
-		APP_LOG(APP_LOG_LEVEL_INFO, "inside ELSE isDateShown");
+		//APP_LOG(APP_LOG_LEVEL_INFO, "inside ELSE isDateShown");
+		isDateShown = 0;
+		
 		line->go_to_right_anim = property_animation_create_layer_frame(layer_weather, &START_PLACE_MR_RECT, &TO_RIGHT_MR_RECT);
 		animation_set_duration((Animation*) line->go_to_right_anim, ANIM_DURATION);
 		animation_set_curve((Animation*) line->go_to_right_anim, AnimationCurveEaseOut);
@@ -52,8 +54,6 @@ void init_animations_aplite(Line *line) {
 			.stopped = (AnimationStoppedHandler) animationStoppedHandler
 		};
 		animation_set_handlers((Animation *) line->go_to_right_anim, handlerDate, NULL);
-		
-		isDateShown = 0;
 	}
 }	
 
@@ -61,12 +61,14 @@ void init_animations_aplite(Line *line) {
  * Initialisation for Basalt
  */
 void init_animations_basalt(Line *line) {
-  APP_LOG(APP_LOG_LEVEL_INFO, "inside init_animations_basalt");
+  //APP_LOG(APP_LOG_LEVEL_INFO, "inside init_animations_basalt");
 	Layer *layer_date = text_layer_get_layer(line->date_layer);
 	Layer *layer_weather = text_layer_get_layer(line->weather_layer);
 
 	if (isDateShown == 0) {
-		APP_LOG(APP_LOG_LEVEL_INFO, "inside IF isDateShown");
+		//APP_LOG(APP_LOG_LEVEL_INFO, "inside IF isDateShown");
+		isDateShown = 1;
+		
 		line->go_to_right_anim = property_animation_create_layer_frame(layer_date, &START_PLACE_MR_RECT, &TO_RIGHT_MR_RECT);
 		animation_set_duration((Animation*) line->go_to_right_anim, ANIM_DURATION);
 		animation_set_curve((Animation*) line->go_to_right_anim, AnimationCurveEaseOut);
@@ -74,10 +76,10 @@ void init_animations_basalt(Line *line) {
 		line->from_the_left_anim = property_animation_create_layer_frame(layer_weather, &FROM_THE_LEFT_MR_RECT, &START_PLACE_MR_RECT);
 		animation_set_duration((Animation*) line->from_the_left_anim, ANIM_DURATION);
 		animation_set_curve((Animation*) line->from_the_left_anim, AnimationCurveEaseOut);
-		
-		isDateShown = 1;
 	} else {
-		APP_LOG(APP_LOG_LEVEL_INFO, "inside ELSE isDateShown");
+		//APP_LOG(APP_LOG_LEVEL_INFO, "inside ELSE isDateShown");
+		isDateShown = 0;
+		
 		line->go_to_right_anim = property_animation_create_layer_frame(layer_weather, &START_PLACE_MR_RECT, &TO_RIGHT_MR_RECT);
 		animation_set_duration((Animation*) line->go_to_right_anim, ANIM_DURATION);
 		animation_set_curve((Animation*) line->go_to_right_anim, AnimationCurveEaseOut);
@@ -85,8 +87,6 @@ void init_animations_basalt(Line *line) {
 		line->from_the_left_anim = property_animation_create_layer_frame(layer_date, &FROM_THE_LEFT_MR_RECT, &START_PLACE_MR_RECT);
 		animation_set_duration((Animation*) line->from_the_left_anim, ANIM_DURATION);
 		animation_set_curve((Animation*) line->from_the_left_anim, AnimationCurveEaseOut);
-		
-		isDateShown = 0;
 	}
 }
 
@@ -97,14 +97,14 @@ void schedule_animation(Line *line) {
   static bool use_go_to_right_rect = false;
 
   if (use_go_to_right_rect) {
-		APP_LOG(APP_LOG_LEVEL_INFO, "schedule_animation inside IF");
+		//APP_LOG(APP_LOG_LEVEL_INFO, "schedule_animation inside IF");
 		animation_set_delay((Animation*) line->go_to_right_anim, ANIM_DELAY);
 		animation_schedule((Animation*) line->go_to_right_anim);
 		
 		animation_set_delay((Animation*) line->from_the_left_anim, ANIM_DELAY);
 		animation_schedule((Animation*) line->from_the_left_anim);
   } else {
-    APP_LOG(APP_LOG_LEVEL_INFO, "schedule_animation inside ELSE");
+    //APP_LOG(APP_LOG_LEVEL_INFO, "schedule_animation inside ELSE");
 		animation_set_delay((Animation*) line->from_the_left_anim, ANIM_DELAY);
 		animation_schedule((Animation*) line->from_the_left_anim);
 		

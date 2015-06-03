@@ -22,8 +22,9 @@
 enum {
 	KEY_INVERT = 0,
 	KEY_SHOW_DATE_WEATHER = 1,
-	KEY_TEMPERATURE = 2,
-	KEY_CONDITIONS = 3
+	KEY_TEMPERATURE_CELSIUS = 2,
+	KEY_TEMPERATURE_FAHRENHEIT = 3,
+	KEY_CONDITIONS = 4
 };
 
 /**
@@ -49,7 +50,8 @@ extern GFont date_font;
  * global variables
  */
 extern Line line_date_weather;
-extern char temperature_buffer[8];
+extern char temperature_celsius_buffer[8];
+extern char temperature_fahrenheit_buffer[8];
 extern char conditions_buffer[32];
 extern char weather_layer_buffer[32];
 

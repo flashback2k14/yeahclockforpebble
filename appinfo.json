@@ -1,9 +1,10 @@
 {
     "appKeys": {
-        "KEY_CONDITIONS": 3,
+        "KEY_CONDITIONS": 4,
         "KEY_INVERT": 0,
         "KEY_SHOW_DATE_WEATHER": 1,
-        "KEY_TEMPERATURE": 2
+        "KEY_TEMPERATURE_CELSIUS": 2,
+        "KEY_TEMPERATURE_FAHRENHEIT": 3
     },
     "capabilities": [
         "location",
@@ -40,10 +41,11 @@
     "sdkVersion": "3",
     "shortName": "Yeah! Clock",
     "targetPlatforms": [
+        "aplite",
         "basalt"
     ],
     "uuid": "108a0909-9ffe-43f3-8fc8-f36bb2edff33",
-    "versionLabel": "1.4",
+    "versionLabel": "1.5",
     "watchapp": {
         "watchface": true
     }

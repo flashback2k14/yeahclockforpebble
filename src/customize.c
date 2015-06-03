@@ -2,17 +2,11 @@
 #include "global.h"	
 #include "customize.h"
 #include "layeranimation.h"
-
-	
-char temperature_buffer[8];
-char conditions_buffer[32];
-char weather_layer_buffer[32];
 	
 	
 void perform_customisation(Tuple *t) {
 	//which key was received?
 	switch(t->key) {
-		//APP_LOG(APP_LOG_LEVEL_INFO, "Key %d recognized!", (int)t->key);
 		case KEY_INVERT:
 			//it's the KEY_INVERT key
 			if (strcmp(t -> value -> cstring, "on") == 0) {
@@ -80,8 +74,13 @@ void perform_customisation(Tuple *t) {
 			}
 			break;
 		
-		case KEY_TEMPERATURE:
-			snprintf(temperature_buffer, sizeof(temperature_buffer), "%dC", (int)t->value->int32);
+		case KEY_TEMPERATURE_CELSIUS:
+			snprintf(temperature_celsius_buffer, sizeof(temperature_celsius_buffer), "%dC", (int)t->value->int32);
+			APP_LOG(APP_LOG_LEVEL_INFO, "perform_customisation: %d", (int)t->value->int32);
+      break;
+		
+		case KEY_TEMPERATURE_FAHRENHEIT:
+			snprintf(temperature_fahrenheit_buffer, sizeof(temperature_fahrenheit_buffer), "%dF", (int)t->value->int32);
 			APP_LOG(APP_LOG_LEVEL_INFO, "perform_customisation: %d", (int)t->value->int32);
       break;
 		
