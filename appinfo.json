@@ -1,14 +1,17 @@
 {
     "appKeys": {
+        "KEY_CONDITIONS": 4,
         "KEY_INVERT": 0,
-        "KEY_SHOW_DATE_BATT": 1,
-        "KEY_USE_BATT": 3,
-        "KEY_USE_DATE": 2
+        "KEY_SHOW_DATE_WEATHER": 1,
+        "KEY_SWITCH_TEMPERATURE": 5,
+        "KEY_TEMPERATURE_CELSIUS": 2,
+        "KEY_TEMPERATURE_FAHRENHEIT": 3
     },
     "capabilities": [
+        "location",
         "configurable"
     ],
-    "companyName": "sebastian-kloppe@gmx.de",
+    "companyName": "yeahdev@gmail.com",
     "longName": "Yeah! Clock",
     "projectType": "native",
     "resources": {
@@ -36,11 +39,14 @@
             }
         ]
     },
-    "sdkVersion": "2",
+    "sdkVersion": "3",
     "shortName": "Yeah! Clock",
+    "targetPlatforms": [
+        "aplite",
+        "basalt"
+    ],
     "uuid": "108a0909-9ffe-43f3-8fc8-f36bb2edff33",
-    "versionCode": 1,
-    "versionLabel": "1.1",
+    "versionLabel": "1.5",
     "watchapp": {
         "watchface": true
     }
