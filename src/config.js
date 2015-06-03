@@ -1,13 +1,13 @@
-//######################################
-//             Variables
-//######################################
+//######################################//
+//             Variables								//
+//######################################//
 var initialized = false;
 var options = {};
 var weatherInfo = {};
 
-//######################################
-//              Weather
-//######################################
+//######################################//
+//              Weather									//
+//######################################//
 //function for request to OpenWeatherMap
 var xhrRequest = function (url, type, callback) {
   var xhr = new XMLHttpRequest();
@@ -21,32 +21,34 @@ var xhrRequest = function (url, type, callback) {
 //callback functions for weather
 function locationSuccess(pos) {
   //construct URL
-  var url = 'http://api.openweathermap.org/data/2.5/weather?lat=' +
-      pos.coords.latitude + '&lon=' + pos.coords.longitude;
-	//console.log('DEBUG: Url: ' + url);
+  var url = 'http://api.openweathermap.org/data/2.5/weather?lat=' + pos.coords.latitude + '&lon=' + pos.coords.longitude;
   //send request to OpenWeatherMap
   xhrRequest(url, 'GET', 
     function(responseText) {
       //responseText contains a JSON object with weather info
       var json = JSON.parse(responseText);
-      //temperature in Kelvin requires adjustment
-      weatherInfo.temperature = Math.round(json.main.temp - 273.15);
+      //temperature in Kelvin requires adjustment to grad celsius
+			var gradCelsius = Math.round(json.main.temp - 273.15);
+			var fahrenheit = Math.round((gradCelsius * 1.8) + 32);
+      weatherInfo.temperature = gradCelsius;
+			weatherInfo.fahrenheit = fahrenheit;
       //conditions
       weatherInfo.conditions = json.weather[0].main;      
-			//console.log('DEBUG: Temperature is ' + weatherInfo.temperature);
-      //console.log('DEBUG: Conditions are ' + weatherInfo.conditions);
+			console.log('DEBUG: Temperature is C ' + weatherInfo.temperature);
+			console.log('DEBUG: Temperature is F ' + weatherInfo.fahrenheit);
+      console.log('DEBUG: Conditions are ' + weatherInfo.conditions);
     }      
   );
-	
+	//dictionary
+	weatherInfo = {
+		"KEY_TEMPERATURE_CELSIUS": weatherInfo.temperature,
+		"KEY_TEMPERATURE_FAHRENHEIT": weatherInfo.fahrenheit,
+		"KEY_CONDITIONS": weatherInfo.conditions
+	};
 	//send to Pebble
-	Pebble.sendAppMessage(
-		{"KEY_TEMPERATURE": weatherInfo.temperature, "KEY_CONDITIONS": weatherInfo.conditions},
-		function(e) {
-			console.log('Weather info sent to Pebble successfully!');
-		},
-		function(e) {
-			console.log('Error sending weather info to Pebble!');
-		}
+	Pebble.sendAppMessage(weatherInfo,
+		function(e) {console.log('Weather info sent to Pebble successfully!');},
+		function(e) {console.log('Error sending weather info to Pebble!');}
 	);
 }
 
@@ -56,7 +58,7 @@ function locationError(err) {
 
 //get weather
 function getWeather() {
-  console.log('getWeather entered');
+	console.log('DEBUG: getWeather entered');
 	navigator.geolocation.getCurrentPosition(
     locationSuccess,
     locationError,
@@ -64,9 +66,9 @@ function getWeather() {
   );
 }
 
-//######################################
-//          Pebble EventListener
-//######################################
+//######################################//
+//         Pebble EventListener					//
+//######################################//
 //listen for when the watchface is opened
 Pebble.addEventListener("ready", function() {
   console.log("ready called!");
@@ -95,17 +97,17 @@ Pebble.addEventListener("webviewclosed", function(e) {
   if (e.response.charAt(0) === "{" && e.response.slice(-1) === "}" && e.response.length > 5) {
     options = JSON.parse(decodeURIComponent(e.response));
 		console.log("DEBUG: Options: " + JSON.stringify(options));
+		//dictionary
+		options = {
+			"KEY_INVERT": options.selectInvert,
+			"KEY_SHOW_DATE_WEATHER": options.selectShowDate
+		};
 		//Send to Pebble, persist there
-		Pebble.sendAppMessage(
-			{"KEY_INVERT": options.selectInvert, "KEY_SHOW_DATE_WEATHER": options.selectShowDate},
-			function (e) {
-				console.log("Sending settings data...");
-			}, 
-			function(e) {
-				console.log("Settings feedback failed!");
-			}
+		Pebble.sendAppMessage(options,
+			function (e) {console.log("Sending settings data...");}, 
+			function(e) {console.log("Settings feedback failed!");}
 		);
   } else {
-		console.log("Cancelled");
+		console.log("webviewclosed: Cancelled");
   }
 });
