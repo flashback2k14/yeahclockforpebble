@@ -2,6 +2,7 @@
 #include "global.h"	
 #include "customize.h"
 #include "layeranimation.h"
+#include "colouration.h"	
 /**
  * declaration UI Elements
  */
@@ -18,8 +19,8 @@ bool isDateShown = 0;
 bool restartAnimation = 0;
 bool switchTemperatureToFahrenheit = 0;
 
-char temperature_celsius_buffer[8];
-char temperature_fahrenheit_buffer[8];
+char temperature_celsius_buffer[10];
+char temperature_fahrenheit_buffer[10];
 char conditions_buffer[32];
 char weather_layer_buffer[32];
 /**
@@ -93,6 +94,7 @@ static void handle_middle_row_text_state() {
 	if (strcmp(conditions_buffer, "") == 0) {
 		//set placeholder text for weather informations
 		text_layer_set_text(line_date_weather.weather_layer, "Loading...");
+		call_app_message_outbox_send();
 	} else {
 		if (switchTemperatureToFahrenheit == 0) snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "%s, %s", temperature_celsius_buffer, conditions_buffer);
 		else snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "%s, %s", temperature_fahrenheit_buffer, conditions_buffer);

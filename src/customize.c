@@ -75,18 +75,18 @@ void perform_customisation(Tuple *t) {
 			break;
 		
 		case KEY_TEMPERATURE_CELSIUS:
-			snprintf(temperature_celsius_buffer, sizeof(temperature_celsius_buffer), "%dC", (int)t->value->int32);
-			APP_LOG(APP_LOG_LEVEL_INFO, "perform_customisation: %d", (int)t->value->int32);
+			snprintf(temperature_celsius_buffer, sizeof(temperature_celsius_buffer), "%d \u00B0C", (int)t->value->int32);
+			APP_LOG(APP_LOG_LEVEL_INFO, "KEY_TEMPERATURE_CELSIUS: %d", (int)t->value->int32);
       break;
 		
 		case KEY_TEMPERATURE_FAHRENHEIT:
-			snprintf(temperature_fahrenheit_buffer, sizeof(temperature_fahrenheit_buffer), "%dF", (int)t->value->int32);
-			APP_LOG(APP_LOG_LEVEL_INFO, "perform_customisation: %d", (int)t->value->int32);
+			snprintf(temperature_fahrenheit_buffer, sizeof(temperature_fahrenheit_buffer), "%d \u00B0F", (int)t->value->int32);
+			APP_LOG(APP_LOG_LEVEL_INFO, "KEY_TEMPERATURE_FAHRENHEIT: %d", (int)t->value->int32);
       break;
 		
     case KEY_CONDITIONS:
 			snprintf(conditions_buffer, sizeof(conditions_buffer), "%s", t->value->cstring);
-			APP_LOG(APP_LOG_LEVEL_INFO, "perform_customisation: %s", t->value->cstring);
+			APP_LOG(APP_LOG_LEVEL_INFO, "KEY_CONDITIONS: %s", t->value->cstring);
       break;
 		
 		case KEY_SWITCH_TEMPERATURE:
