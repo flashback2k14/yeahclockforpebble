@@ -4,6 +4,7 @@
 var initialized = false;
 var options = {};
 var weatherInfo = {};
+var apiKey = '89d42f702cf0f8b92d28fbeaad9ecff4';
 
 //######################################//
 //              Weather									//
@@ -21,7 +22,7 @@ var xhrRequest = function (url, type, callback) {
 //callback functions for weather
 function locationSuccess(pos) {
   //construct URL
-  var url = 'http://api.openweathermap.org/data/2.5/weather?lat=' + pos.coords.latitude + '&lon=' + pos.coords.longitude;
+  var url = 'http://api.openweathermap.org/data/2.5/weather?lat=' + pos.coords.latitude + '&lon=' + pos.coords.longitude + '&appid=' + apiKey;
   //send request to OpenWeatherMap
   xhrRequest(url, 'GET', 
     function(responseText) {

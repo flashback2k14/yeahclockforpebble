@@ -16,14 +16,15 @@
     "resources": {
         "media": [
             {
-                "file": "images/icon_144.png",
-                "name": "ICON_144",
+                "file": "images/icon_28.png",
+                "menuIcon": true,
+                "name": "ICON_28",
                 "type": "png"
             },
             {
-                "file": "fonts/RobotoSlab-Regular.ttf",
-                "name": "ROBOTO_SLAB_20",
-                "type": "font"
+                "file": "images/icon_144.png",
+                "name": "ICON_144",
+                "type": "png"
             },
             {
                 "file": "fonts/RobotoSlab-Regular.ttf",
@@ -31,10 +32,9 @@
                 "type": "font"
             },
             {
-                "file": "images/icon_28.png",
-                "menuIcon": true,
-                "name": "ICON_28",
-                "type": "png"
+                "file": "fonts/RobotoSlab-Regular.ttf",
+                "name": "ROBOTO_SLAB_20",
+                "type": "font"
             }
         ]
     },
@@ -45,7 +45,7 @@
         "basalt"
     ],
     "uuid": "108a0909-9ffe-43f3-8fc8-f36bb2edff33",
-    "versionLabel": "1.5",
+    "versionLabel": "1.3",
     "watchapp": {
         "watchface": true
     }
